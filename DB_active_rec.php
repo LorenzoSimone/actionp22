@@ -1031,7 +1031,7 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			$flag = $this->_track_aliases($table);
 			
-			if( $flag ) === null )
+			if( $flag  === null )
 					{
 						trigger_error('Alias tracking function error.');
 					}
@@ -1042,7 +1042,7 @@ class CI_DB_active_record extends CI_DB_driver {
 					
 			$flagf = $this->from($table);
 			
-			if( $flagf ) === null )
+			if( $flagf  === null )
 					{
 						trigger_error('From function error.');
 					}
@@ -1086,7 +1086,7 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			$flagf = $this->from($table);
 			
-			if( $flagf ) === null )
+			if( $flagf === null )
 					{
 						trigger_error('From function error.');
 					}
@@ -1101,7 +1101,7 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			$flagw = $this->where($where);
 			
-			if( $flagw ) === null )
+			if( $flagw  === null )
 					{
 						trigger_error('Where function error.');
 					}
@@ -1340,7 +1340,7 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			$flags = $this->set($set);
 			
-			if( $flags ) === null )
+			if( $flags  === null )
 					{
 						trigger_error('Set tracking function error.');
 					}
@@ -1402,7 +1402,7 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			$flags = $this->set($set);
 			
-			if( $flags ) === null )
+			if( $flags  === null )
 					{
 						trigger_error('Set tracking function error.');
 					}
@@ -1443,7 +1443,7 @@ class CI_DB_active_record extends CI_DB_driver {
 			
 			$flagw = $this->where($where);
 			
-			if( $flagw ) === null )
+			if( $flagw  === null )
 					{
 						trigger_error('Where function error.');
 					}
@@ -1508,7 +1508,7 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			$flags = $this->set_update_batch($set, $index);
 			
-			if( $flags ) === null )
+			if( $flags  === null )
 					{
 						trigger_error('Set tracking function error.');
 					}
@@ -1738,7 +1738,7 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			$flagw = $this->where($where);
 			
-			if( $flagw ) === null )
+			if( $flagw  === null )
 					{
 						trigger_error('Where function error.');
 					}
@@ -1837,7 +1837,7 @@ class CI_DB_active_record extends CI_DB_driver {
 			{
 				$flag = $this->_track_aliases($t);
 			
-				if( $flag ) === null )
+				if( $flag  === null )
 					{
 						trigger_error('Alias tracking function error.');
 					}
@@ -2182,7 +2182,7 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			$flag = $this->_track_aliases($this->ar_from);
 			
-			if( $flag ) === null )
+			if( $flag  === null )
 					{
 						trigger_error('Alias tracking function error.');
 					}
