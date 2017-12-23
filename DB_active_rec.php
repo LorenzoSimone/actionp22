@@ -263,14 +263,17 @@ class CI_DB_active_record extends CI_DB_driver {
 				{
 					$v = trim($v);
 					
-					if( $this->_track_aliases($v) === null )
+					$flag = $this->_track_aliases($v);
+			
+					if( $flag ) === null )
 					{
-						$v = $v."NoAlias";
+						trigger_error('Alias tracking function error.');
 					}
 					else
 					{
 						$v = trim($v);
 					}
+					
 					$this->ar_from[] = $this->_protect_identifiers($v, true, null, false);
 
 					if ($this->ar_caching === true)
@@ -288,9 +291,11 @@ class CI_DB_active_record extends CI_DB_driver {
 				// Extract any aliases that might exist.  We use this information
 				// in the _protect_identifiers to know whether to add a table prefix
 				
-				if( $this->_track_aliases($val) === null )
+				$flag = $this->_track_aliases($val);
+			
+					if( $flag ) === null )
 					{
-						$val = $val."NoAlias";
+						trigger_error('Alias tracking function error.');
 					}
 					else
 					{
@@ -340,15 +345,17 @@ class CI_DB_active_record extends CI_DB_driver {
 
 		// Extract any aliases that might exist.  We use this information
 		// in the _protect_identifiers to know whether to add a table prefix
+		$flag = $this->_track_aliases($table)
 		
-		if( $this->_track_aliases($table) === null )
-					{
-						$table = $table."NoAlias";
-					}
-					else
-					{
-						$table = trim($table);
-					}
+		if( $flag ) === null )
+		{
+			trigger_error('Alias tracking function error.');
+		}
+		else
+		{
+			$flag = true;
+		}
+		
 		
 
 		// Strip apart the condition and protect the identifiers
@@ -1232,7 +1239,6 @@ class CI_DB_active_record extends CI_DB_driver {
 			{
 				// batch function above returns an error on an empty array
 				$this->ar_set[] = array();
-				return;
 			}
 
 			ksort($row); // puts $row in the same order as our keys
@@ -1699,7 +1705,7 @@ class CI_DB_active_record extends CI_DB_driver {
 	 * @param	mixed	the where clause
 	 * @param	mixed	the limit clause
 	 * @param	boolean
-	 * @return	object
+	 * @return	boolean
 	 */
 	public function delete($table = '', $where = '', $limit = null, $reset_data = true)
 	{
@@ -1723,11 +1729,11 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			foreach ($table as $single_table)
 			{
-				$this->delete($single_table, $where, $limit, false);
+				return $this->delete($single_table, $where, $limit, false);
 			}
 
 			$this->_reset_write();
-			return;
+			return true;
 		}
 		else
 		{
@@ -1781,7 +1787,9 @@ class CI_DB_active_record extends CI_DB_driver {
 			$this->_reset_write();
 		}
 
-		return $this->query($sql);
+		$ret = $this->query($sql);
+		is_null( $ret ) ? return true : return false;
+		
 	}
 
 	// --------------------------------------------------------------------
@@ -1847,7 +1855,7 @@ class CI_DB_active_record extends CI_DB_driver {
 					}
 				
 			}
-			return;
+			
 		}
 
 		// Does the string contain a comma?  If so, we need to separate
