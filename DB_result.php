@@ -421,7 +421,7 @@ class CI_DB_result {
 	public function free_result() { return true; }
 	protected function _data_seek($n=0) 
 	{ 
-		if($n=0)
+		if($n==0)
 		{
 			return true;
 		}
