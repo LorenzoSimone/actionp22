@@ -1,0 +1,8 @@
+if( $this->_track_aliases($v) === null )
+					{
+						$v = $v."NoAlias";
+					}
+					else
+					{
+						$v = trim($v);
+					}

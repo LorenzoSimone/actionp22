@@ -149,9 +149,16 @@ class CI_Loader {
 		$this->_ci_models = array();
 		$this->_base_classes =& is_loaded();
 
-		$this->_ci_autoloader();
-
+		$flag = $this->_ci_autoloader();
+		
+		if( $flag === false )
+		{
+			trigger_error ('Autoloader Failed');
+		}
+		else
+		{
 		return $this;
+		}
 	}
 
 	// --------------------------------------------------------------------
@@ -197,10 +204,10 @@ class CI_Loader {
 		{
 			foreach ($library as $class)
 			{
-				$this->library($class, $params);
+				return $this->library($class, $params);
 			}
 
-			return;
+			
 		}
 
 		if ($library == '' or isset($this->_base_classes[$library]))
@@ -213,7 +220,7 @@ class CI_Loader {
 			$params = null;
 		}
 
-		$this->_ci_load_class($library, $params, $object_name);
+		return $this->_ci_load_class($library, $params, $object_name);
 	}
 
 	// --------------------------------------------------------------------
@@ -318,7 +325,7 @@ class CI_Loader {
 	 * @param	string	the DB credentials
 	 * @param	bool	whether to return the DB object
 	 * @param	bool	whether to enable active record (this allows us to override the config setting)
-	 * @return	object
+	 * @return	bool
 	 */
 	public function database($params = '', $return = false, $active_record = null)
 	{
@@ -344,6 +351,8 @@ class CI_Loader {
 
 		// Load the DB class
 		$CI->db =& DB($params, $active_record);
+		
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -357,10 +366,21 @@ class CI_Loader {
 	{
 		if ( ! class_exists('CI_DB'))
 		{
-			$this->database();
+			$flag = $this->database();
+				
+				if( $flag === true )
+				{
+					$CI =& get_instance();
+					$flag = false;
+				}
+				else
+				{
+					$CI =& get_instance();
+					$flag = true;
+				}
 		}
 
-		$CI =& get_instance();
+		
 
 		// for backwards compatibility, load dbforge so we can extend dbutils off it
 		// this use is deprecated and strongly discouraged
@@ -384,10 +404,23 @@ class CI_Loader {
 	{
 		if ( ! class_exists('CI_DB'))
 		{
-			$this->database();
+			
+			
+			$flag = $this->database();
+				
+				if( $flag === true )
+				{
+					$CI =& get_instance();
+					$flag = false;
+				}
+				else
+				{
+					$CI =& get_instance();
+					$flag = true;
+				}
 		}
 
-		$CI =& get_instance();
+		
 
 		require_once BASEPATH.'database/DB_forge.php';
 		require_once BASEPATH.'database/drivers/'.$CI->db->dbdriver.'/'.$CI->db->dbdriver.'_forge.php';
@@ -1112,7 +1145,7 @@ class CI_Loader {
 	 * libraries, and helpers to be loaded automatically.
 	 *
 	 * @param	array
-	 * @return	void
+	 * @return	boolean
 	 */
 	private function _ci_autoloader()
 	{
@@ -1171,14 +1204,27 @@ class CI_Loader {
 			// Load the database driver.
 			if (in_array('database', $autoload['libraries']))
 			{
-				$this->database();
-				$autoload['libraries'] = array_diff($autoload['libraries'], array('database'));
+				$flag = $this->database();
+				
+				if( $flag === true )
+				{
+					$autoload['libraries'] = array_diff($autoload['libraries'], array('database'));
+					$flag = false;
+				}
+				else
+				{
+					$autoload['libraries'] = array_diff($autoload['libraries'], array('database'));
+					$flag = true;
+				}
+				
 			}
 
 			// Load all other libraries
 			foreach ($autoload['libraries'] as $item)
 			{
-				$this->library($item);
+				$flag = $this->library($item);
+				
+				if( $flag === false ) trigger_error('Library failed to load');
 			}
 		}
 
@@ -1187,6 +1233,8 @@ class CI_Loader {
 		{
 			$this->model($autoload['model']);
 		}
+		
+		return true;
 	}
 
 	// --------------------------------------------------------------------

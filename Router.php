@@ -167,10 +167,17 @@ class CI_Router {
 		$this->uri->_explode_segments();
 
 		// Parse any custom routing that may exist
-		$this->_parse_routes();
+		$flag = $this->_parse_routes();
+		
+		if( $flag === false ){
+			trigger_error('Routes parsing error');
+		}
+		else
+		{
 
 		// Re-index the segment array so that it starts with 1 rather than 0
 		$this->uri->_reindex_segments();
+		}
 	}
 
 	// --------------------------------------------------------------------
@@ -194,13 +201,23 @@ class CI_Router {
 
 			$this->set_class($x[0]);
 			$this->set_method($x[1]);
-			$this->_set_request($x);
+			$flag = $this->_set_request($x);
+			if( $flag === false )
+			{
+				trigger_error('Set request failed');
+			}
 		}
 		else
 		{
 			$this->set_class($this->default_controller);
 			$this->set_method('index');
-			$this->_set_request(array($this->default_controller, 'index'));
+			
+			$flag = $this->_set_request(array($this->default_controller, 'index'));
+			if( $flag === false )
+			{
+				trigger_error('Set request failed');
+			}
+			
 		}
 
 		// re-index the routed segments array so it starts with 1 rather than 0
@@ -392,7 +409,12 @@ class CI_Router {
 
 		// If we got this far it means we didn't encounter a
 		// matching route so we'll set the site default route
-		$this->_set_request($this->uri->segments);
+		$flag = $this->_set_request($this->uri->segments);
+			if( $flag === false )
+			{
+				trigger_error('Set request failed');
+			}
+		
 	}
 
 	// --------------------------------------------------------------------

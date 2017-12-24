@@ -116,9 +116,16 @@ class CI_Security {
 		}
 
 		// Set the CSRF hash
-		$this->_csrf_set_hash();
-
+		$flag = $this->_csrf_set_hash();
+		
+		if ( $flag === false )
+		{
+			trigger_error('CRSF couldnt set hash');
+		}
+		else
+		{
 		log_message('debug', "Security Class Initialized");
+		}
 	}
 
 	// --------------------------------------------------------------------
@@ -155,12 +162,23 @@ class CI_Security {
 
 		// Nothing should last forever
 		unset($_COOKIE[$this->_csrf_cookie_name]);
-		$this->_csrf_set_hash();
-		$this->csrf_set_cookie();
+		
+		$flag = $this->_csrf_set_hash();
+		$flagc = $this->csrf_set_cookie();
+		
+		if ( $flag === false || $flagc )
+		{
+			trigger_error('CRSF couldnt set hash or cookies');
+		}
+		else
+		{
+		
+		
 
 		log_message('debug', "CSRF token verified ");
 
 		return $this;
+		}
 	}
 
 	// --------------------------------------------------------------------

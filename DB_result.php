@@ -73,7 +73,13 @@ class CI_DB_result {
 		}
 
 		// add the data to the object
-		$this->_data_seek();
+		$flag = $this->_data_seek(0);
+		
+		if ( is_null($flag) === true )
+		{
+			trigger_error('Data Seek failed');
+		}
+		
 		$result_object = array();
 
 		while ($row = $this->_fetch_object())
@@ -115,7 +121,15 @@ class CI_DB_result {
 			return array();
 		}
 
-		$this->_data_seek();
+		$flag = $this->_data_seek(0);
+		
+		if ( is_null($flag) === true )
+		{
+			trigger_error('Data Seek failed');
+		}
+		
+		
+		
 		while ($row = $this->_fetch_object())
 		{
 			$this->result_object[] = $row;
@@ -146,8 +160,14 @@ class CI_DB_result {
 		{
 			return array();
 		}
-
-		$this->_data_seek();
+		
+		$flag = $this->_data_seek(0);
+		
+		if ( is_null($flag) === true )
+		{
+			trigger_error('Data Seek failed');
+		}
+		
 		while ($row = $this->_fetch_assoc())
 		{
 			$this->result_array[] = $row;
@@ -399,7 +419,18 @@ class CI_DB_result {
 	public function list_fields() { return array(); }
 	public function field_data() { return array(); }
 	public function free_result() { return true; }
-	protected function _data_seek() { return true; }
+	protected function _data_seek($type, $n=0) { 
+	
+		if ( strcmp($type, '') == 0 or $n=0 )
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
 	protected function _fetch_assoc() { return array(); }
 	protected function _fetch_object() { return array(); }
 

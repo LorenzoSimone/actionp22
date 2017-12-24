@@ -672,7 +672,7 @@ class CI_Input {
 	{
 		if (empty($this->headers))
 		{
-			$this->request_headers();
+			$this->headers = $this->request_headers();
 		}
 
 		if ( ! isset($this->headers[$index]))

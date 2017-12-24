@@ -262,8 +262,18 @@ class CI_DB_active_record extends CI_DB_driver {
 				foreach (explode(',', $val) as $v)
 				{
 					$v = trim($v);
-					$this->_track_aliases($v);
-
+					
+					$flag = $this->_track_aliases($v);
+					
+					if( $flag  === null )
+					{
+						trigger_error('Alias tracking function error.');
+					}
+					else
+					{
+						$v = trim($v);
+					}
+					
 					$this->ar_from[] = $this->_protect_identifiers($v, true, null, false);
 
 					if ($this->ar_caching === true)
@@ -280,7 +290,18 @@ class CI_DB_active_record extends CI_DB_driver {
 
 				// Extract any aliases that might exist.  We use this information
 				// in the _protect_identifiers to know whether to add a table prefix
-				$this->_track_aliases($val);
+				
+				$flag = $this->_track_aliases($val);
+			
+				if( $flag  === null )
+					{
+						trigger_error('Alias tracking function error.');
+					}
+					else
+					{
+						$val = trim($val);
+					}
+			
 
 				$this->ar_from[] = $this->_protect_identifiers($val, true, null, false);
 
@@ -325,7 +346,18 @@ class CI_DB_active_record extends CI_DB_driver {
 
 		// Extract any aliases that might exist.  We use this information
 		// in the _protect_identifiers to know whether to add a table prefix
-		$this->_track_aliases($table);
+		
+		$flag = $this->_track_aliases($table);
+			
+			if( $flag  === null )
+					{
+						trigger_error('Alias tracking function error.');
+					}
+					else
+					{
+						$table = trim($table);
+					}
+		
 
 		// Strip apart the condition and protect the identifiers
 		if (preg_match('/([\w\.]+)([\W\s]+)(.+)/', $cond, $match))
@@ -945,13 +977,44 @@ class CI_DB_active_record extends CI_DB_driver {
 	{
 		if ($table != '')
 		{
-			$this->_track_aliases($table);
-			$this->from($table);
+			if( $this->_track_aliases($table) === null )
+					{
+						$table = '';
+					}
+					else
+					{
+						$table = trim($table);
+					}
+					
+			$flag = $this->from($table);
+			
+			if( is_null($flag) === true )
+			{
+				trigger_error('No object associated.');
+			}
+			else
+			{
+				$flag = true;
+			}
+			
 		}
 
-		if ( ! is_null($limit))
+		if (is_null($limit)===false)
 		{
-			$this->limit($limit, $offset);
+			
+			$flag = $this->limit($limit, $offset);
+			
+			if( is_null($flag) === true )
+			{
+				trigger_error('No object associated.');
+			}
+			else
+			{
+				$flag=true;
+				
+			}
+			
+			
 		}
 
 		$sql = $this->_compile_select();
@@ -974,8 +1037,29 @@ class CI_DB_active_record extends CI_DB_driver {
 	{
 		if ($table != '')
 		{
-			$this->_track_aliases($table);
-			$this->from($table);
+			$flag = $this->_track_aliases($table);
+			
+			if( $flag  === null )
+					{
+						trigger_error('Alias tracking function error.');
+					}
+					else
+					{
+						$table = trim($table);
+					}
+					
+			$flagf = $this->from($table);
+			
+			if( $flagf  === null )
+					{
+						trigger_error('From function error.');
+					}
+					else
+					{
+						$flagf = true;
+					}
+			
+			
 		}
 
 		$sql = $this->_compile_select($this->_count_string . $this->_protect_identifiers('numrows'));
@@ -1008,17 +1092,47 @@ class CI_DB_active_record extends CI_DB_driver {
 	{
 		if ($table != '')
 		{
-			$this->from($table);
+			$flagf = $this->from($table);
+			
+			if( $flagf === null )
+					{
+						trigger_error('From function error.');
+					}
+					else
+					{
+						$flagf = true;
+					}
+			
 		}
 
 		if ( ! is_null($where))
 		{
-			$this->where($where);
+			$flagw = $this->where($where);
+			
+			if( $flagw  === null )
+					{
+						trigger_error('Where function error.');
+					}
+					else
+					{
+						$flagw = true;
+					}
+			
 		}
 
 		if ( ! is_null($limit))
 		{
-			$this->limit($limit, $offset);
+			$flagl = $this->limit($limit, $offset);
+			
+			if( is_null($flagl) === true )
+			{
+				trigger_error('No object associated.');
+			}
+			else
+			{
+				$flagl = true;
+			}
+			
 		}
 
 		$sql = $this->_compile_select();
@@ -1043,7 +1157,18 @@ class CI_DB_active_record extends CI_DB_driver {
 	{
 		if ( ! is_null($set))
 		{
-			$this->set_insert_batch($set);
+			$flagb = $this->set_insert_batch($set);
+			
+			if( is_null($flagb) === true )
+			{
+				trigger_error('No object associated.');
+			}
+			else
+			{
+				$flagb = true;
+			}
+			
+			
 		}
 
 		if (count($this->ar_set) == 0)
@@ -1115,7 +1240,6 @@ class CI_DB_active_record extends CI_DB_driver {
 			{
 				// batch function above returns an error on an empty array
 				$this->ar_set[] = array();
-				return;
 			}
 
 			ksort($row); // puts $row in the same order as our keys
@@ -1158,10 +1282,24 @@ class CI_DB_active_record extends CI_DB_driver {
 	 */
 	function insert($table = '', $set = null)
 	{
+		
 		if ( ! is_null($set))
 		{
-			$this->set($set);
+			$flagb = $this->set($set);
+			
+			if( is_null($flagb) === true )
+			{
+				trigger_error('No object associated.');
+			}
+			else
+			{
+				$flagb = true;
+			}
+			
+			
 		}
+		
+		
 
 		if (count($this->ar_set) == 0)
 		{
@@ -1207,7 +1345,18 @@ class CI_DB_active_record extends CI_DB_driver {
 	{
 		if ( ! is_null($set))
 		{
-			$this->set($set);
+			$flags = $this->set($set);
+			
+			if( $flags  === null )
+					{
+						trigger_error('Set tracking function error.');
+					}
+					else
+					{
+						$flags = true;
+					}
+					
+			
 		}
 
 		if (count($this->ar_set) == 0)
@@ -1258,7 +1407,19 @@ class CI_DB_active_record extends CI_DB_driver {
 
 		if ( ! is_null($set))
 		{
-			$this->set($set);
+			$flags = $this->set($set);
+			
+			if( $flags  === null )
+					{
+						trigger_error('Set tracking function error.');
+					}
+					else
+					{
+						$flags = true;
+					}
+					
+					
+			
 		}
 
 		if (count($this->ar_set) == 0)
@@ -1286,12 +1447,34 @@ class CI_DB_active_record extends CI_DB_driver {
 
 		if ($where != null)
 		{
-			$this->where($where);
+			
+			$flagw = $this->where($where);
+			
+			if( $flagw  === null )
+					{
+						trigger_error('Where function error.');
+					}
+					else
+					{
+						$flagw = true;
+					}
+			
 		}
 
 		if ($limit != null)
 		{
-			$this->limit($limit);
+			$flagl = $this->limit($limit);
+			
+			if( is_null($flagl) === true )
+			{
+				trigger_error('No object associated.');
+			}
+			else
+			{
+				$flagl = true;
+			}
+			
+			
 		}
 
 		$sql = $this->_update($this->_protect_identifiers($table, true, null, false), $this->ar_set, $this->ar_where, $this->ar_orderby, $this->ar_limit);
@@ -1330,7 +1513,19 @@ class CI_DB_active_record extends CI_DB_driver {
 
 		if ( ! is_null($set))
 		{
-			$this->set_update_batch($set, $index);
+			$flags = $this->set_update_batch($set, $index);
+			
+			if( $flags  === null )
+					{
+						trigger_error('Set tracking function error.');
+					}
+					else
+					{
+						$flags = true;
+					}
+					
+					
+			
 		}
 
 		if (count($this->ar_set) == 0)
@@ -1511,7 +1706,7 @@ class CI_DB_active_record extends CI_DB_driver {
 	 * @param	mixed	the where clause
 	 * @param	mixed	the limit clause
 	 * @param	boolean
-	 * @return	object
+	 * @return	boolean
 	 */
 	public function delete($table = '', $where = '', $limit = null, $reset_data = true)
 	{
@@ -1535,11 +1730,11 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			foreach ($table as $single_table)
 			{
-				$this->delete($single_table, $where, $limit, false);
+				return $this->delete($single_table, $where, $limit, false);
 			}
 
 			$this->_reset_write();
-			return;
+			
 		}
 		else
 		{
@@ -1548,12 +1743,32 @@ class CI_DB_active_record extends CI_DB_driver {
 
 		if ($where != '')
 		{
-			$this->where($where);
+			$flagw = $this->where($where);
+			
+			if( $flagw  === null )
+					{
+						trigger_error('Where function error.');
+					}
+					else
+					{
+						$flagw = true;
+					}
+			
 		}
 
 		if ($limit != null)
 		{
-			$this->limit($limit);
+			$flagl = $this->limit($limit);
+			
+			if( is_null($flagl) === true )
+			{
+				trigger_error('No object associated.');
+			}
+			else
+			{
+				$flagl = true;
+			}
+			
 		}
 
 		if (count($this->ar_where) == 0 && count($this->ar_wherein) == 0 && count($this->ar_like) == 0)
@@ -1573,7 +1788,10 @@ class CI_DB_active_record extends CI_DB_driver {
 			$this->_reset_write();
 		}
 
-		return $this->query($sql);
+		$ret = $this->query($sql);
+		
+		return is_null( $ret ) ? true : false;
+		
 	}
 
 	// --------------------------------------------------------------------
@@ -1604,7 +1822,7 @@ class CI_DB_active_record extends CI_DB_driver {
 	 * Set's the DB Prefix to something new without needing to reconnect
 	 *
 	 * @param	string	the prefix
-	 * @return	string
+	 * @return	boolean Whether the query contains or not an alias
 	 */
 	public function set_dbprefix($prefix = '')
 	{
@@ -1627,9 +1845,19 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			foreach ($table as $t)
 			{
-				$this->_track_aliases($t);
+				$flag = $this->_track_aliases($t);
+			
+				if( $flag  === null )
+					{
+						trigger_error('Alias tracking function error.');
+					}
+					else
+					{
+						$table = trim($table);
+					}
+				
 			}
-			return;
+			
 		}
 
 		// Does the string contain a comma?  If so, we need to separate
@@ -1653,6 +1881,12 @@ class CI_DB_active_record extends CI_DB_driver {
 			{
 				$this->ar_aliased_tables[] = $table;
 			}
+			
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -1956,7 +2190,18 @@ class CI_DB_active_record extends CI_DB_driver {
 		// portion of the query to determine if there are any aliases
 		if ($this->_protect_identifiers === true and count($this->ar_cache_from) > 0)
 		{
-			$this->_track_aliases($this->ar_from);
+			$flag = $this->_track_aliases($this->ar_from);
+			
+			if( $flag  === null )
+					{
+						trigger_error('Alias tracking function error.');
+					}
+					else
+					{
+						$table = trim($table);
+					}
+					
+			
 		}
 
 		$this->ar_no_escape = $this->ar_cache_no_escape;
