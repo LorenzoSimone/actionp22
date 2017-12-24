@@ -167,10 +167,7 @@ if ( ! function_exists('load_class'))
 		}
 
 		// Keep track of what we just loaded
-		if( is_loaded($class) === false )
-		{
-			trigger_error('Failed keeping track of this class'.$class);
-		}
+		is_loaded($class);
 
 		$_classes[$class] = new $name();
 		return $_classes[$class];
@@ -195,9 +192,9 @@ if ( ! function_exists('is_loaded'))
 		if ($class != '')
 		{
 			$_is_loaded[strtolower($class)] = $class;
-			return $_is_loaded;
-		}	
-		return false;
+		}
+
+		return $_is_loaded;
 	}
 }
 

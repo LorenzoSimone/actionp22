@@ -276,13 +276,7 @@ class CI_DB_driver {
 		{
 			if ($this->_cache_init())
 			{
-				$flag = $this->load_rdriver();
-				
-				if( strlen($flag) < 1 )
-				{
-					trigger_error('Failed to load driver');
-				}
-				
+				$this->load_rdriver();
 				if (false !== ($cache = $this->CACHE->read($sql)))
 				{
 					return $cache;
@@ -327,15 +321,7 @@ class CI_DB_driver {
 				// if transactions are enabled.  If we don't call this here
 				// the error message will trigger an exit, causing the
 				// transactions to remain in limbo.
-				$flag = $this->trans_complete();
-				
-				if( is_null($flag)=== true)
-				{
-					trigger_error('Transaction failed.');
-				}
-				
-				
-				
+				$this->trans_complete();
 
 				// Log and display errors
 				log_message('error', 'Query error: '.$error_msg);
@@ -388,7 +374,6 @@ class CI_DB_driver {
 		// Load and instantiate the result driver
 
 		$driver			= $this->load_rdriver();
-		
 		$RES			= new $driver();
 		$RES->conn_id	= $this->conn_id;
 		$RES->result_id	= $this->result_id;
@@ -466,11 +451,7 @@ class CI_DB_driver {
 	{
 		if ( ! $this->conn_id)
 		{
-			$flag = $this->initialize();
-			if( $flag === false )
-			{
-				trigger_error('Failed to initialize the connection with the databse');
-			}
+			$this->initialize();
 		}
 
 		return $this->_execute($sql);

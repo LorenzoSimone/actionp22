@@ -216,7 +216,8 @@ class CI_Output {
 	 */
 	function set_status_header($code = 200, $text = '')
 	{
-		return set_status_header($code, $text);
+		set_status_header($code, $text);
+		return $this;
 	}
 	// --------------------------------------------------------------------
 	/**
@@ -469,14 +470,7 @@ class CI_Output {
 			}
 		}
 		// Display the cache
-		$flag = $this->_display(str_replace($match['0'], '', $cache));
-				
-				if ( is_null($flag) === true )
-				{
-					trigger_error('Failed to display data.');
-				}
-		
-		
+		$this->_display(str_replace($match['0'], '', $cache));
 		log_message('debug', "Cache file is current. Sending it to browser.");
 		return true;
 	}
