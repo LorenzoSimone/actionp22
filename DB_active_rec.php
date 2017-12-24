@@ -264,8 +264,8 @@ class CI_DB_active_record extends CI_DB_driver {
 					$v = trim($v);
 					
 					$flag = $this->_track_aliases($v);
-			
-					if( $flag ) === null )
+					
+					if( $flag  === null )
 					{
 						trigger_error('Alias tracking function error.');
 					}
@@ -293,7 +293,7 @@ class CI_DB_active_record extends CI_DB_driver {
 				
 				$flag = $this->_track_aliases($val);
 			
-					if( $flag ) === null )
+				if( $flag  === null )
 					{
 						trigger_error('Alias tracking function error.');
 					}
@@ -301,6 +301,7 @@ class CI_DB_active_record extends CI_DB_driver {
 					{
 						$val = trim($val);
 					}
+			
 
 				$this->ar_from[] = $this->_protect_identifiers($val, true, null, false);
 
@@ -345,17 +346,17 @@ class CI_DB_active_record extends CI_DB_driver {
 
 		// Extract any aliases that might exist.  We use this information
 		// in the _protect_identifiers to know whether to add a table prefix
-		$flag = $this->_track_aliases($table)
 		
-		if( $flag ) === null )
-		{
-			trigger_error('Alias tracking function error.');
-		}
-		else
-		{
-			$flag = true;
-		}
-		
+		$flag = $this->_track_aliases($table);
+			
+			if( $flag  === null )
+					{
+						trigger_error('Alias tracking function error.');
+					}
+					else
+					{
+						$table = trim($table);
+					}
 		
 
 		// Strip apart the condition and protect the identifiers
@@ -1733,7 +1734,7 @@ class CI_DB_active_record extends CI_DB_driver {
 			}
 
 			$this->_reset_write();
-			return true;
+			
 		}
 		else
 		{
@@ -1788,7 +1789,8 @@ class CI_DB_active_record extends CI_DB_driver {
 		}
 
 		$ret = $this->query($sql);
-		is_null( $ret ) ? return true : return false;
+		
+		return is_null( $ret ) ? true : false;
 		
 	}
 
