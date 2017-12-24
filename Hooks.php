@@ -121,12 +121,7 @@ class CI_Hooks {
 		{
 			foreach ($this->hooks[$which] as $val)
 			{
-				$flag = $this->_run_hook($val);
-				
-				if ( $flag === false )
-				{
-					return false;
-				}
+				$this->_run_hook($val);
 				
 			}
 		}
@@ -171,7 +166,7 @@ class CI_Hooks {
 
 		if ($this->in_progress == true)
 		{
-			return;
+			return false;
 		}
 
 		// -----------------------------------
@@ -237,6 +232,8 @@ class CI_Hooks {
 
 			$HOOK = new $class;
 			$HOOK->$function($params);
+			$this->in_progress = false;
+			return true;
 		}
 		else
 		{
@@ -246,10 +243,11 @@ class CI_Hooks {
 			}
 
 			$function($params);
+			$this->in_progress = false;
+			return true;
 		}
 
-		$this->in_progress = false;
-		return true;
+		
 	}
 
 }

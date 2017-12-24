@@ -419,7 +419,18 @@ class CI_DB_result {
 	public function list_fields() { return array(); }
 	public function field_data() { return array(); }
 	public function free_result() { return true; }
-	protected function _data_seek($n=0,$type) { return true; }
+	protected function _data_seek($type,$n=0) 
+	{ 	
+		if( $type != '')
+		{
+			return true; 
+		}
+		else
+		{
+			$type='type';
+			return true;
+		}
+	}
 	protected function _fetch_assoc() { return array(); }
 	protected function _fetch_object() { return array(); }
 
