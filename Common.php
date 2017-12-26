@@ -170,11 +170,7 @@ if ( ! function_exists('load_class'))
 			trigger_error('Unable to locate the specified class: '.$class.'.php');
 		}
 		
-		// Keep track of what we just loaded
-		is_loaded($class);
-
-		$_classes[$class] = new $name();
-		return $_classes[$class];
+		
 		
 		// Keep track of what we just loaded
 		if( is_null(is_loaded($class)) === true )

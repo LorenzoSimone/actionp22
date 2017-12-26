@@ -21,7 +21,7 @@ class Layout {
 
 	public function _getCI()
 	{
-		return this->$CI;
+		return $CI;
 	}
 	
 	public function __construct()

@@ -26,7 +26,7 @@ class Mylayout {
 	
 	public function _getCI()
 	{
-		return this->$CI;
+		return $CI;
 	}
 
     // пути к файлам вида
