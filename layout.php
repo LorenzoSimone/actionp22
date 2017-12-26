@@ -17,14 +17,20 @@
  */
 class Layout {
 
-	private $CI =& get_instance();
+	private $CI;
+
+	public function __construct()
+	{
+		$this->CI =& get_instance();
+	}
+	
+	public function getCI()
+	{
+		return $this->CI;
+	}
 
 	public function render($part, $data = array())
 	{
-		if(is_null($CI) === true )
-		{
-			trigger_error('CI failed to load');
-		}
 		$data['part_name'] = $part;
 		$this->CI->load->view('layout', $data); 
 	}
