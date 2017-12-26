@@ -29,14 +29,17 @@
  */
 class CI_Controller {
 
-	private static $instance = 0;
+	private static $instance;
 
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		if( is_null($instance) === true ) trigger_error('CI failed to load');
+		
+		ob_start();
+		echo $instance;
+		ob_end_clean();
 		
 		// Assign all the class objects that were instantiated by the
 		// bootstrap file (CodeIgniter.php) to local class variables
