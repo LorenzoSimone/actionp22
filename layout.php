@@ -17,14 +17,22 @@
  */
 class Layout {
 
-	
-	public function render($data = array())
+	private $CI;
+
+	public function _getCI()
 	{
-		$data['page_title'] = 'Your title';
-		$this->load->view('header');
-		$this->load->view('menu');
-		$this->load->view('content', $data);
-		$this->load->view('footer');
+		return this->$CI;
+	}
+	
+	public function __construct()
+	{
+		$this->CI =& get_instance();
+	}
+
+	public function render($part, $data = array())
+	{
+		$data['part_name'] = $part;
+		$this->CI->load->view('layout', $data); 
 	}
 
 }
