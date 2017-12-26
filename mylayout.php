@@ -17,17 +17,7 @@
  */
 class Mylayout {
 
-    private $CI;
-
-    public function __construct()
-    {
-        $this->CI =& get_instance();
-    }
-	
-	public function getCI()
-	{
-		return $this->CI;
-	}
+    
 
     // пути к файлам вида
     public $header = 'header';

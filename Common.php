@@ -81,7 +81,11 @@ if ( ! function_exists('is_really_writable'))
 		// write a file then read it.  Bah...
 		if (is_dir($file))
 		{
-			$file = rtrim($file, '/').'/'.md5(mt_rand(1,100).mt_rand(1,100));
+			$options = [
+   				 'cost' => 13,
+			];	
+
+			$file = rtrim($file, '/').'/'.password_hash(mt_rand(1,100).mt_rand(1,100), PASSWORD_BCRYPT, $options);
 
 			if (($fp = fopen($file, FOPEN_WRITE_CREATE)) === false)
 			{
@@ -166,6 +170,11 @@ if ( ! function_exists('load_class'))
 			trigger_error('Unable to locate the specified class: '.$class.'.php');
 		}
 		
+		// Keep track of what we just loaded
+		is_loaded($class);
+
+		$_classes[$class] = new $name();
+		return $_classes[$class];
 		
 		// Keep track of what we just loaded
 		if( is_null(is_loaded($class)) === true )

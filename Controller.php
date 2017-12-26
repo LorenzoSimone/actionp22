@@ -29,26 +29,14 @@
  */
 class CI_Controller {
 
-	private  $instance;
 	
-	public function getinstance()
-	{
-		if(isset($instance) === true )
-		{
-		return $instance;
-		}
-		else
-		{
-			return $instance;
-		}
-	}
 
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		$instance =& $this;
+		
 		
 		// Assign all the class objects that were instantiated by the
 		// bootstrap file (CodeIgniter.php) to local class variables
@@ -67,7 +55,7 @@ class CI_Controller {
 
 	public static function &get_instance()
 	{
-		return $instance;
+		return self::$instance;
 	}
 }
 // END Controller class
