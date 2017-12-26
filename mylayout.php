@@ -17,17 +17,8 @@
  */
 class Mylayout {
 
-    private $CI;
+    private $CI =& get_instance();
 
-    public function __construct()
-    {
-        $this->CI =& get_instance();
-    }
-	
-	public function _getCI()
-	{
-		return $CI;
-	}
 
     // пути к файлам вида
     public $header = 'header';
@@ -36,6 +27,10 @@ class Mylayout {
     // метод получает на вход два параметра: название вида и данные для него
     public function content($views = '', $data = '')
     {
+		if(is_null($CI) === true )
+		{
+			trigger_error('CI failed to load');
+		}
         // загружаем header
         if ($this->header)
         {
