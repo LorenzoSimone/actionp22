@@ -29,19 +29,18 @@
  */
 class CI_Controller {
 
-	private $instance;
+	private static $instance;
+	private $obistance;
 
 	/**
 	 * Constructor
 	 */
 	 
-	public function getInstance()
-	{
-		return $this->$instance;
-	}
+
 	
 	public function __construct()
 	{
+		$obistance = $istance;
 		
 		// Assign all the class objects that were instantiated by the
 		// bootstrap file (CodeIgniter.php) to local class variables
@@ -56,6 +55,8 @@ class CI_Controller {
 		$this->load->initialize();
 		
 		log_message('debug', "Controller Class Initialized");
+		
+		echo $obistance;
 	}
 
 	public static function &get_instance()
